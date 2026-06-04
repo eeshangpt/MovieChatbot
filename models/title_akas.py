@@ -32,7 +32,7 @@ class TitleAkas(Base):
         String(10),
         nullable=True,
     )
-    country_name: Mapped[str] = mapped_column(String(255))
+    country_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
     language: Mapped[str | None] = mapped_column(
         String(20),

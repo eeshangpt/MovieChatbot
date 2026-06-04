@@ -19,10 +19,15 @@ wheels/
 # IDE settings
 .vscode/
 .idea/
+.ruff_cache/
 
 # Data files
 data/
+*.csv
 
 # Files
 archive/
-*.ipynb
+docs/
+run-ruff.sh
+understanding.md
+CLAUDE.md

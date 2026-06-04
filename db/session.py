@@ -1,18 +1,15 @@
 import os
 
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
 
 # ======================================================
 # DATABASE CONFIG
 # ======================================================
 
 load_dotenv(".env.dev")
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql+psycopg2://admin:admin123@localhost:5432/ingestion_db",
-)
+DATABASE_URL = os.getenv("DATABASE_URL", "")
 
 
 # ======================================================
