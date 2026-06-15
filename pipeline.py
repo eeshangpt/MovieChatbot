@@ -19,7 +19,7 @@ from sqlalchemy import text
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
-from db.session import SessionLocal, engine
+from db.postgres_session import SessionLocal, engine
 from LoadAndStore import clean_raw_files
 from models import (
     NameBasics,

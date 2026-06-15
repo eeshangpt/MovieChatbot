@@ -29,5 +29,7 @@ data/
 archive/
 docs/
 run-ruff.sh
-understanding.md
+understanding*.md
 CLAUDE.md
+.agents/
+.codex/

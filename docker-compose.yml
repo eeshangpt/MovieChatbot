@@ -1,21 +1,46 @@
 services:
   postgres:
     image: postgres:16
-    container_name: parquet_postgres
+    container_name: imdb_postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin123
-      POSTGRES_DB: ingestion_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin"]
+      test: [ "CMD-SHELL", "pg_isready -U admin" ]
       interval: 10s
       timeout: 5s
       retries: 5
-
+  neo4j:
+    image: neo4j:5.20-community
+    container_name: imdb_neo4j
+    restart: unless-stopped
+    ports:
+      - "${NEO4J_BROWSER_PORT}:7474"   # Neo4j Browser (HTTP)
+      - "${NEO4J_PORT}:7687"   # Bolt protocol (driver connections)
+    volumes:
+      - ./data/neo4j/neo4j_data:/data
+      - ./data/neo4j/neo4j_logs:/logs
+      - ./data/neo4j/neo4j_import:/var/lib/neo4j/import
+      - ./data/neo4j/neo4j_plugins:/plugins
+    environment:
+      - NEO4J_AUTH=${NEO4J_USER}/${NEO4J_PASSWORD}
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_server_memory_heap_initial__size=1G
+      - NEO4J_server_memory_heap_max__size=4G
+      - NEO4J_server_memory_pagecache__size=4G
+      - NEO4J_db_transaction_timeout=300s
+      - NEO4J_server_config_strict__validation_enabled=false
+    healthcheck:
+      test: [ "CMD", "neo4j", "status" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s    # Neo4j is slow to boot, give it time
 volumes:
   postgres_data:

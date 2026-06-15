@@ -1,4 +1,4 @@
-from db.session import engine
+from db.postgres_session import engine
 from models.base import Base
 from models.name_basics import NameBasics
 from models.title_akas import TitleAkas
