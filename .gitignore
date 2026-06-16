@@ -33,3 +33,6 @@ understanding*.md
 CLAUDE.md
 .agents/
 .codex/
+
+# Chatbot logs
+logs/
