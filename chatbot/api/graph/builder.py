@@ -1,5 +1,5 @@
 from langgraph.checkpoint.memory import MemorySaver
-from langgraph.graph import END, StateGraph, START
+from langgraph.graph import END, StateGraph
 
 from chatbot.api.graph.nodes import generate_answer, generate_sql, run_sql
 from chatbot.api.graph.state import ChatState
