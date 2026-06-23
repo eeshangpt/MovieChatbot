@@ -1,8 +1,8 @@
 import os
 
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 
-load_dotenv(".env.dev")
+load_dotenv(find_dotenv(".env.dev"))
 
 DATABASE_URL: str = os.getenv("DATABASE_URL", "")
 OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")

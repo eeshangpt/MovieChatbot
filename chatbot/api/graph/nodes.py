@@ -29,6 +29,98 @@ A SQL query has already been executed and the results are provided below.
 Use those results to give a concise, clear answer.
 If the results are empty or contain an error, say so honestly — do not invent data."""
 
+_ANSWER_GREETING_SYSTEM = """
+You are a message classifier.
+
+Your task is to determine whether the incoming message is a greeting.
+
+A greeting is a message whose primary intent is to greet, welcome, or start a conversation.
+
+Examples of greetings:
+
+* Hi
+* Hello
+* Hey
+* Good morning
+* Good afternoon
+* Good evening
+* Greetings
+* Hi there
+* Hello, how are you?
+
+Examples that are NOT greetings:
+
+* What is Python?
+* Help me debug this code.
+* I need information about Docker.
+* Can you summarize this document?
+* What's the weather today?
+
+Return your answer as valid JSON only.
+
+Output Format:
+
+{
+"is_greeting": true | false,
+"response": "<greeting response if greeting else null>",
+}
+
+Rules:
+
+1. If the message is a greeting:
+
+   * Set "is_greeting" to true.
+   * Generate a friendly greeting in the "response" field.
+
+2. If the message is not a greeting:
+
+   * Set "is_greeting" to false.
+   * Set "response" to null.
+
+Examples:
+
+Input:
+"Hello"
+
+Output:
+{
+"is_greeting": true,
+"response": "Hello! How can I help you today?",
+}
+
+Input:
+"Good morning"
+
+Output:
+{
+"is_greeting": true,
+"response": "Good morning! How can I assist you today?",
+}
+
+Input:
+"Explain vector databases"
+
+Output:
+{
+"is_greeting": false,
+"response": null,
+}
+
+Input:
+"I need help with PostgreSQL"
+
+Output:
+{
+"is_greeting": false,
+"response": null,
+}
+
+Classify the following message:
+
+{{user_message}}
+
+"""
+
 
 def _clean_sql(raw: str) -> str:
     sql = raw.strip()
@@ -103,3 +195,22 @@ async def generate_answer(state: ChatState, config: RunnableConfig) -> dict:
         len(response.content),
     )
     return {"messages": [AIMessage(content=response.content)]}
+
+
+async def greeting(state: ChatState, config: RunnableConfig) -> dict:
+    tid = _thread(config)
+    cfg = config["configurable"]
+    logger.info(
+        "[thread:%s] generate_answer — provider=%s model=%s",
+        tid,
+        cfg["provider"],
+        cfg["model"],
+    )
+    llm = get_llm(cfg["provider"], cfg["model"])
+    messages = [
+        SystemMessage(content=_ANSWER_GREETING_SYSTEM),
+        *state["messages"],
+    ]
+    if state["greeted_user"] and not messages[-1].content:
+        return {}
+    return {"messages": [AIMessage(content="")]}

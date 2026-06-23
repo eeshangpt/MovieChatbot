@@ -7,5 +7,6 @@ from typing_extensions import TypedDict
 
 class ChatState(TypedDict):
     messages: Annotated[list[BaseMessage], add_messages]
+    greeted_user: bool
     sql_query: str
     sql_results: str

@@ -1,6 +1,6 @@
 import os
 
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 # DATABASE CONFIG
 # ======================================================
 
-load_dotenv(".env.dev")
+load_dotenv(find_dotenv(".env.dev"))
 
 POSTGRES_USER = os.getenv("POSTGRES_USER", "")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "")

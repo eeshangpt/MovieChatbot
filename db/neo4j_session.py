@@ -1,14 +1,14 @@
 import os
 from contextlib import contextmanager
 
-from dotenv import load_dotenv
+from dotenv import find_dotenv, load_dotenv
 from neo4j import GraphDatabase
 
 # ======================================================
 # DATABASE CONFIG
 # ======================================================
 
-load_dotenv(".env.dev")
+load_dotenv(find_dotenv(".env.dev"))
 
 NEO4J_HOST = os.getenv("NEO4J_HOST", "localhost")
 NEO4J_PORT = os.getenv("NEO4J_PORT", "7687")
